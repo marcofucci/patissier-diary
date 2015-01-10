@@ -1,0 +1,36 @@
+{
+  "author": "My Name",
+  "name": "Patissier",
+  "description": "Patissier",
+  "version": "0.0.1",
+  "homepage": "",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "main": "index.html",
+  "node-main": "",
+  "single-instance": true,
+  "chromium-args": "",
+  "dom_storage_quota": 1024,
+  "window": {
+    "//": "screen settings",
+    "title": "my awesome app",
+    "icon": "link.png",
+    "toolbar": true,
+    "frame": true,
+    "position": "center",
+    "width": 1300,
+    "height": 900,
+    "min_width": 1224,
+    "min_height": 768,
+    "resizable": true,
+    "always-on-top": false,
+    "fullscreen": false
+  },
+  "dependencies": {
+    "nedb": "^1.0.1",
+    "pouchdb": "^3.2.0"
+  }
+}

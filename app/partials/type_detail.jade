@@ -1,0 +1,21 @@
+h3 Recipes
+
+div
+	div.row.recipes(ng-repeat='data in recipes')
+		h4 {{data.group}}
+		div.inner.col-md-4(ng-repeat='recipe in data.recipes')
+			a(ui-sref='recipe_detail({typeId:recipe.type, recipeId:recipe._id})')
+				h4 {{recipe.name}}
+			div.row
+				div.col-md-2
+					div.number-circle {{recipe.stats.count}}
+					p times
+				div.col-md-1
+					i.small(ng-if='recipe.stats.count > 0') last
+				div.col-md-6
+					div(ng-if='recipe.stats.count > 0')
+						rating.gi-1-5x(ng-model='recipe.stats.lastTest.rating', readonly='true')
+						p {{recipe.stats.lastTest.date|date:"dd/MM/yyyy"}}
+				div.col-md-3.avRating
+					div(ng-if='recipe.stats.count > 0')
+						div.number-circle.number-circle-small {{recipe.stats.avRating}}/5

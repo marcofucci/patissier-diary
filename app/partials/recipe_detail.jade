@@ -1,0 +1,40 @@
+h3 {{recipe.name}}
+	button.btn.btn-default(ng-click="addTest()") Add
+	button.btn.btn-info(ng-click="openRecipeNotes()") Final Recipe
+
+div#tests_list
+	div.row(ng-repeat='test in tests')
+		hr
+		div.col-md-2
+			div.media-left
+				a(href="#", ng-click="changeTest(test)").media-left
+					span.badge.badge-2x {{ tests.length - $index }}
+			div.media-body
+				h4 {{test.date|date:"dd/MM/yyyy"}}
+				rating.gi-1-3x(ng-model='test.rating', readonly='true')
+
+				div.row.img(ng-show='test.img')
+					div.thumbnail
+						img(src='{{test.img}}', ng-click='openImage(test.img)')
+		div.col-md-10
+			table.table.table-bordered(width='100%')
+				tbody
+					tr
+						td(width='10%') Aspect
+						td(width='45%') {{test.aspect_obs}}
+						td(width='45%') {{test.aspect_corr}}
+					tr
+						td Smell
+						td {{test.smell_obs}}
+						td {{test.smell_corr}}
+					tr
+						td Taste
+						td {{test.taste_obs}}
+						td {{test.taste_corr}}
+					tr
+						td Texture
+						td {{test.texture_obs}}
+						td {{test.texture_corr}}
+			div(ng-if='test.notes')
+				h4 Notes
+				p(ng-bind-html='renderHtml(test.notes)')

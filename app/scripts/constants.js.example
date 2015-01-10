@@ -1,0 +1,4 @@
+var Constants = {
+	DB_PATH: '<path-to-db>',
+	IMG_PATH: '<path-to-img-folder>'
+};

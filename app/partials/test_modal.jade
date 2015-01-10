@@ -1,0 +1,75 @@
+.modal-header
+  h3.modal-title {{add ? 'New ' : 'Change'}} {{recipe.name}}
+  |  
+  form.modal-body#test-form
+    ul.nav.nav-tabs
+      li(ng-class="{'active': activeTab == 'general'}")
+        a(href='#', ng-click="changeTab('general')") General
+      li(ng-class="{'active': activeTab == 'notes'}")
+        a(href='#', ng-click="changeTab('notes')") Notes
+
+    br
+    div.form-group(ng-show="activeTab == 'general'")
+
+      p.input-group
+        input.form-control(type='text', placeholder='Date', datepicker-popup='dd/MM/yyyy', ng-model='test.date', is-open='opened', close-text='Close')
+        span.input-group-btn
+          button.btn.btn-default(type='button', ng-click='openCalendar($event)', value='calendar')
+            i.glyphicon.glyphicon-calendar
+
+      p.input-group
+        rating.gi-1-5x(ng-model='test.rating')
+
+      p.input-group
+        div
+          h3 {{test.img ? 'Change Photo' : 'Add Photo'}}
+
+          div.row(ng-show='test.temp_img')
+            div.col-xs-6.col-md-3.thumbnail
+              img(src='{{test.temp_img}}')
+
+          input(type="file", ng-model='test.temp_img')
+
+    div.form-group(ng-show="activeTab == 'notes'")
+      p
+        textarea.form-control(ng-model='test.notes', rows='4', placeholder='Notes')
+
+      div
+        table.table.table-bordered
+          thead
+            tr
+              th &nbsp;
+              th Observations
+              th Corrections
+          tbody
+            tr
+              td Aspect
+              td
+                textarea.form-control(ng-model='test.aspect_obs', rows='2')
+              td
+                textarea.form-control(ng-model='test.aspect_corr', rows='2')
+            tr
+              td Smell
+              td
+                textarea.form-control(ng-model='test.smell_obs', rows='2')
+              td
+                textarea.form-control(ng-model='test.smell_corr', rows='2')
+            tr
+              td Taste
+              td
+                textarea.form-control(ng-model='test.taste_obs', rows='2')
+              td
+                textarea.form-control(ng-model='test.taste_corr', rows='2')
+            tr
+              td Texture
+              td
+                textarea.form-control(ng-model='test.texture_obs', rows='2')
+              td
+                textarea.form-control(ng-model='test.texture_corr', rows='2')
+
+  |         
+  .modal-footer
+    button.btn.btn-primary(ng-click='save()') Save
+    |             
+    button.btn.btn-warning(ng-click='cancel()') Cancel
+    button.btn.btn-danger.pull-left(ng-really-message='Are you sure you want to delete this test?', ng-really-click='delete()', ng-if='!add') Delete
