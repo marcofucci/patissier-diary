@@ -94,7 +94,11 @@ angular.module('app.services', [])
 					{_id: recipe._id},
 					{
 						$set: {
-							notes: recipe.notes
+							notes: recipe.notes,
+							ingredients: recipe.ingredients,
+							procedure: recipe.procedure,
+							cooking_time: recipe.cooking_time,
+							materials: recipe.materials
 						}
 					},
 					callback

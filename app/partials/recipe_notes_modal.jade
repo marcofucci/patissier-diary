@@ -7,12 +7,25 @@
         a.glyphicon.glyphicon-check.gi-1-5x(href='#', ng-click="changeEdit(false)", ng-show='edit')
   |  
   form.modal-body#test-form
-    div(ng-show="!edit")
+    div.no-edit(ng-show="!edit")
 
-      div(ng-bind-html='recipe.notes')
+      div.row.row1
+        div.col-md-4
+          h4 Ingredients
+          div(ng-bind-html='recipe.ingredients')
+        div.col-md-8
+          h4 Procedure
+          div(ng-bind-html='recipe.procedure')
+      div.row.form-group
+        div.col-md-4
+          h4 Cooking Time
+          div(ng-bind-html='recipe.cooking_time')
+        div.col-md-8
+          h4 Materials
+          div(ng-bind-html='recipe.materials')
 
     div.form-group(ng-show="edit")
-      notes-form(ng-model='recipe.notes', recipe='recipe')
+      notes-form(ng-model='recipe')
 
   |         
   .modal-footer

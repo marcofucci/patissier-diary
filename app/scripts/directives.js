@@ -31,8 +31,7 @@ function() {
       templateUrl:  '/partials/notes_form.html',
       scope: {
         model: '=ngModel',
-        ref: '@ngModel',
-        recipe: '='
+        ref: '@ngModel'
       },
       link: function(scope) {
         var saveDelay = 100,
@@ -55,12 +54,15 @@ function() {
 
           if (!saveInProgress) {
             saveInProgress = true;
-            db.recipe.saveNotes(scope.recipe, saveFinished);
+            db.recipe.saveNotes(scope.model, saveFinished);
           }
         };
 
         // watch fields
-        scope.$watch('model', watchChange);
+        scope.$watch('model.ingredients', watchChange);
+        scope.$watch('model.procedure', watchChange);
+        scope.$watch('model.cooking_time', watchChange);
+        scope.$watch('model.materials', watchChange);
       }
     };
 }])

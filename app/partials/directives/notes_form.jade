@@ -1,1 +1,14 @@
-text-angular(ng-model='model', ta-toolbar="[['h1','h2'],['bold','italics','underline'], ['ul', 'ol'], ['indent', 'outdent'], ['insertLink']]")
+div.row
+  div.col-md-4
+    h4 Ingredients
+    text-angular(ng-model='model.ingredients', ta-toolbar="[['bold','italics','underline']]")
+  div.col-md-8
+    h4 Procedure
+    text-angular(ng-model='model.procedure', ta-toolbar="[['h1','h2'],['bold','italics','underline'], ['ul', 'ol'], ['indent', 'outdent'], ['insertLink']]")
+div.row.form-group
+  div.col-md-4
+    h4 Cooking Time
+    textarea.form-control(ng-model='model.cooking_time', rows='2')
+  div.col-md-8
+    h4 Materials
+    textarea.form-control(ng-model='model.materials', rows='2')

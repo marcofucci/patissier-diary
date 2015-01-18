@@ -81,8 +81,7 @@ angular.module('app.controllers', [])
         size: 'lg',
         resolve: {
           recipe: function() { 
-            var recipeEdit = {};
-            return angular.copy(recipe, recipeEdit);
+            return recipe;
           }
         }
       });
