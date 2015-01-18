@@ -22,13 +22,15 @@
     "components-underscore": "~1.5.2",
     "angular-ui-router": "~0.2.13",
     "angular-dialog-service": "~5.2.6",
-    "moment": "~2.8.4",
+    "moment": "~2.9.0",
     "angular-blocks": "~0.1.9",
     "angular-moment": "~0.8.3",
     "textAngular": "~1.2.2",
-    "fontawesome": "~4.2.0"
+    "fontawesome": "~4.2.0",
+    "d3": "~3.5.3"
   },
   "resolutions": {
-    "angular": "1.2.5"
+    "angular": "1.2.5",
+    "moment": ">=2.0.0 <2.9.0"
   }
 }

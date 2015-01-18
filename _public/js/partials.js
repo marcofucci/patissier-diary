@@ -3,6 +3,15 @@ angular.module('partials', [])
   return $templateCache.put('/partials/base.html', [
 '',
 '<div class="row">',
+'  <div class="col-md-11">',
+'    <h1>Patissier</h1>',
+'  </div>',
+'  <div class="col-md-1">',
+'    <p><a ui-sref="monthly_progress" class="glyphicon glyphicon-align-left gi-1-5x"></a></p>',
+'  </div>',
+'</div>',
+'<hr>',
+'<div class="row">',
 '  <div ui-view="nav" class="col-md-2 main-nav"></div>',
 '  <div ui-view class="col-md-10 main-main"></div>',
 '</div>',''].join("\n"));
@@ -17,9 +26,28 @@ angular.module('partials', [])
 .run(['$templateCache', function($templateCache) {
   return $templateCache.put('/partials/img_modal.html', [
 '',
-'<div class="modal-header"><img src="{{img}}" style="width: 568px">',
+'<div class="modal-header"><img src="{{img|home}}" style="width: 568px">',
 '  <div class="modal-footer">',
 '    <button ng-click="cancel()" class="btn btn-warning">Close</button>',
+'  </div>',
+'</div>',''].join("\n"));
+}])
+.run(['$templateCache', function($templateCache) {
+  return $templateCache.put('/partials/monthly_progress.html', [
+'',
+'<div id="report"> ',
+'  <h3>Progress for month: ',
+'    <select ng-model="current_month" ng-options="b as b for b in dates">',
+'      <option value="">all</option>',
+'    </select>',
+'  </h3>',
+'  <div ng-repeat="catData in data" class="chart">',
+'    <div class="group group-{{catData.type._id}}">',
+'      <div ng-repeat="item in catData.recipes" class="row">',
+'        <div class="col-md-3 data-header">{{item.recipe}}</div>',
+'        <div class="col-md-9 data data-with-{{item.count}}">{{item.count}}</div>',
+'      </div>',
+'    </div>',
 '  </div>',
 '</div>',''].join("\n"));
 }])
@@ -46,7 +74,7 @@ angular.module('partials', [])
 '        <h4>{{test.date|date:"dd/MM/yyyy"}}</h4>',
 '        <rating ng-model="test.rating" readonly="true" class="gi-1-3x"></rating>',
 '        <div ng-show="test.img" class="row img">',
-'          <div class="thumbnail"><img src="{{test.img}}" ng-click="openImage(test.img)"></div>',
+'          <div class="thumbnail"><img src="{{test.img|home}}" ng-click="openImage(test.img)"></div>',
 '        </div>',
 '      </div>',
 '    </div>',
@@ -91,22 +119,18 @@ angular.module('partials', [])
 '    <div class="col-md-11">',
 '      <h3 class="modal-title">{{recipe.name}}</h3>',
 '    </div>',
-'    <div class="col-md-1"><a href="#" ng-click="changeEdit(true)" ng-show="!edit" class="glyphicon glyphicon-edit gi-1-5x"></a></div>',
+'    <div class="col-md-1"><a href="#" ng-click="changeEdit(true)" ng-show="!edit" class="glyphicon glyphicon-edit gi-1-5x"><a href="#" ng-click="changeEdit(false)" ng-show="edit" class="glyphicon glyphicon-check gi-1-5x"></a></a></div>',
 '  </div> ',
 '  <form id="test-form" class="modal-body">',
 '    <div ng-show="!edit">',
 '      <div ng-bind-html="recipe.notes"></div>',
 '    </div>',
 '    <div ng-show="edit" class="form-group">',
-'      <text-angular ng-model="new_recipe.notes" ta-toolbar="[[\'h1\',\'h2\'],[\'bold\',\'italics\',\'underline\'], [\'ul\', \'ol\'], [\'indent\', \'outdent\'], [\'insertLink\']]"></text-angular>',
+'      <notes-form ng-model="recipe.notes" recipe="recipe"></notes-form>',
 '    </div>',
 '  </form>        ',
-'  <div ng-show="!edit" class="modal-footer">',
-'    <button ng-click="close()" class="btn btn-warning">Close</button>',
-'  </div>',
-'  <div ng-show="edit" class="modal-footer">',
-'    <button ng-click="save()" class="btn btn-primary">Save</button>',
-'    <button ng-click="cancel()" class="btn btn-warning">Cancel</button>',
+'  <div class="modal-footer">',
+'    <button ng-click="close()" ng-class="{\'disabled\': saveInProgress &amp;&amp; typing}" class="btn btn-warning">Close</button>',
 '  </div>',
 '</div>',''].join("\n"));
 }])
@@ -203,7 +227,6 @@ angular.module('partials', [])
 .run(['$templateCache', function($templateCache) {
   return $templateCache.put('/partials/type_detail.html', [
 '',
-'<h3>Recipes</h3>',
 '<div>',
 '  <div ng-repeat="data in recipes" class="row recipes">',
 '    <h4>{{data.group}}</h4>',
@@ -230,4 +253,9 @@ angular.module('partials', [])
 '    </div>',
 '  </div>',
 '</div>',''].join("\n"));
+}])
+.run(['$templateCache', function($templateCache) {
+  return $templateCache.put('/partials/notes_form.html', [
+'',
+'<text-angular ng-model="model" ta-toolbar="[[\'h1\',\'h2\'],[\'bold\',\'italics\',\'underline\'], [\'ul\', \'ol\'], [\'indent\', \'outdent\'], [\'insertLink\']]"></text-angular>',''].join("\n"));
 }]);

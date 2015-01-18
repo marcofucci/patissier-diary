@@ -55,21 +55,13 @@
 
       	recipes: ['$stateParams', '$q', 'db', function($stateParams, $q, db) {
       		var deferred = $q.defer(),
-              groupedRecipes = [];
+              groupedRecipes = [],
+              groupsCount = 0;
 
-          db.subtype.getAllByTypeId($stateParams.typeId, function(err, subtypes) {
-            angular.forEach(subtypes, function(subtype, index) {
-              db.recipe.getAllBySubTypeId(subtype._id, function(err, recipes) {
-                groupedRecipes.push({
-                  'group': subtype.name,
-                  'recipes': recipes
-                });
-              });
-
-            });
-
-        		db.recipe.getAllByTypeId($stateParams.typeId, true, function(err, recipes) {
+          var postProcess = function() {
+            db.recipe.getAllByTypeId($stateParams.typeId, true, function(err, recipes) {
               if (recipes.length) {
+                groupsCount += 1;
                 groupedRecipes.push({
                   'group': groupedRecipes.length ? 'Other' : '',
                   'recipes': recipes
@@ -84,12 +76,35 @@
                       lastTest: lastTest,
                       avRating: avRating
                     }
+
+                    if (i == groupsCount-1 && j == data.recipes.length-1) {
+                      deferred.resolve(groupedRecipes);
+                    }
                   })
                 })
               });
+            });
+          }
 
-        			deferred.resolve(groupedRecipes);
-        		});
+          db.subtype.getAllByTypeId($stateParams.typeId, function(err, subtypes) {
+            if (!subtypes.length) {
+              postProcess();
+            } else {
+              angular.forEach(subtypes, function(subtype, index) {
+                db.recipe.getAllBySubTypeId(subtype._id, function(err, recipes) {
+                  groupsCount += 1;
+                  groupedRecipes.push({
+                    'group': subtype.name,
+                    'recipes': recipes
+                  });
+
+                  if (index == subtypes.length-1) {
+                    postProcess();
+                  }
+                });
+
+              });
+            }
           });
 
       		return deferred.promise;
@@ -133,7 +148,64 @@
       }
     };
 
-		return defs;
-	};
+    defs.MonthlyProgress = {
+      name: 'monthly_progress',
+      parent: 'layout',
+      controller: 'MontlyProgressCtrl',
+      url: '#monthly_progress&month={month}',
+      templateUrl: '/partials/monthly_progress.html',
+      resolve: {
+        dates: ['$q', 'db', function($q, db) {
+          var deferred = $q.defer();
+
+          db.test.getAllMonths(function(err, docs) {
+            deferred.resolve(docs);
+          });
+
+          return deferred.promise;
+        }],
+        currentMonth: ['$stateParams', function($stateParams) {
+          return $stateParams.month;
+        }],
+        data: ['$q', 'db', 'types', 'currentMonth', function($q, db, types, currentMonth) {
+          var deferred = $q.defer(),
+              _data = [];
+
+          angular.forEach(types, function(type, i) {
+            if (!type.component) {
+              var typeData = {
+                type: type,
+                recipes: []
+              };
+
+              db.recipe.getAllByTypeId(type._id, false, function(err, recipes) {
+                angular.forEach(recipes, function(recipe, j) {
+                  db.recipe.getCountPerMonth(recipe._id, currentMonth, function(err, count) {
+                    typeData.recipes.push({
+                      type: type,
+                      recipe: recipe.name,
+                      count: count
+                    });
+
+                    if (j == recipes.length-1) {
+                      deferred.resolve(_data);
+                    }
+                  });
+                });
+              });
+
+              _data.push(typeData);
+            }
+          });
+
+          return deferred.promise;
+        }]
+      }
+    };
+
+    return defs;
+  };
+
+
 
 })();

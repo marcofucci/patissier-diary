@@ -35,7 +35,7 @@ angular.module('app.controllers', [])
           'test': function() {
             var testEdit = {};
             angular.copy(test, testEdit);
-            return testEdit;
+            return test;
           }
         }
       });
@@ -78,6 +78,7 @@ angular.module('app.controllers', [])
         templateUrl: '/partials/recipe_notes_modal.html',
         controller: 'RecipeNotesModalCtrl',
         backdrop: 'static',
+        size: 'lg',
         resolve: {
           recipe: function() { 
             var recipeEdit = {};
@@ -123,7 +124,7 @@ angular.module('app.controllers', [])
           fs.createWriteStream(newFilePath)
         );
 
-        test.img = newFilePath;
+        test.img = newFilePath.replace(process.env.HOME, '$HOME');
         delete test.temp_img;
       }
 
@@ -149,34 +150,26 @@ angular.module('app.controllers', [])
   '$scope', 'recipe', 'db', '$state',
   function($scope, recipe, db, $state) {
     $scope.recipe = recipe;
-    $scope.new_recipe = {};
     $scope.edit = false;
 
     $scope.changeEdit = function(edit) {
       $scope.edit = edit;
-
-      if (edit) {
-        angular.copy($scope.recipe, $scope.new_recipe);
-      }
-    };
-
-    var dismissAndRefresh = function() {
-      $scope.close();
-      $state.reload();
     };
 
     $scope.close = function () {
       $scope.$dismiss('cancel');
-    };
-
-    $scope.cancel = function() {
-      $scope.edit = false;
-    };
-
-    $scope.save = function () {
-      db.recipe.saveNotes(recipe, function() {});
-      $scope.recipe = $scope.new_recipe;
-      $scope.edit = false;
+      $state.reload();
     };
   }
-]);
+])
+
+.controller('MontlyProgressCtrl', ['$scope', 'data', 'dates', 'currentMonth', '$state', function($scope, data, dates, currentMonth, $state){
+  $scope.data = data;
+  $scope.dates = dates;
+  $scope.current_month = currentMonth;
+
+  $scope.$watch('current_month', function(newVal, oldVal) {
+    $state.go('monthly_progress', {month: newVal});
+  });
+}])
+;

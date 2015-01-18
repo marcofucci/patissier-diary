@@ -4,24 +4,16 @@
       h3.modal-title {{recipe.name}}
     div.col-md-1
       a.glyphicon.glyphicon-edit.gi-1-5x(href='#', ng-click="changeEdit(true)", ng-show='!edit')
+        a.glyphicon.glyphicon-check.gi-1-5x(href='#', ng-click="changeEdit(false)", ng-show='edit')
   |  
   form.modal-body#test-form
-    //- ul.nav.nav-tabs
-    //-   li(ng-class="{'active': activeTab == 'preview'}")
-    //-     a(href='#', ng-click="changeTab('preview')") Preview
-    //-   li(ng-class="{'active': activeTab == 'edit'}")
-    //-     a(href='#', ng-click="changeTab('edit')") Edit
-
     div(ng-show="!edit")
 
       div(ng-bind-html='recipe.notes')
 
     div.form-group(ng-show="edit")
-      text-angular(ng-model='new_recipe.notes', ta-toolbar="[['h1','h2'],['bold','italics','underline'], ['ul', 'ol'], ['indent', 'outdent'], ['insertLink']]")
+      notes-form(ng-model='recipe.notes', recipe='recipe')
 
   |         
-  .modal-footer(ng-show='!edit')
-    button.btn.btn-warning(ng-click='close()') Close
-  .modal-footer(ng-show='edit')
-    button.btn.btn-primary(ng-click='save()') Save
-    button.btn.btn-warning(ng-click='cancel()') Cancel
+  .modal-footer
+    button.btn.btn-warning(ng-click='close()', ng-class="{'disabled': saveInProgress && typing}") Close

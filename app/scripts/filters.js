@@ -10,6 +10,7 @@ angular.module('app.filters', [])
   }
 }
 ])
+
 .filter('nl2br', function() {
   return function(text) {
     if (typeof text !== 'undefined' && text) {
@@ -18,4 +19,19 @@ angular.module('app.filters', [])
       return;
     }
   };
-});
+})
+
+.provider('$home', function() {
+  this.$get = [function() {
+    return function(text) {
+      if (text !== undefined && text) {
+        return text.replace('$HOME', process.env.HOME);
+      }
+      return text;
+    }
+  }];
+})
+.filter('home', ['$home', function($home) {
+  return $home;
+}])
+;

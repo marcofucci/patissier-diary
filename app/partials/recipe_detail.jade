@@ -15,7 +15,7 @@ div#tests_list
 
 				div.row.img(ng-show='test.img')
 					div.thumbnail
-						img(src='{{test.img}}', ng-click='openImage(test.img)')
+						img(src='{{test.img|home}}', ng-click='openImage(test.img)')
 		div.col-md-10
 			table.table.table-bordered(width='100%')
 				tbody

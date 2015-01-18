@@ -71,6 +71,24 @@ angular.module('app.services', [])
 					}
 				});
 			},
+			getCountPerMonth: function(recipeId, month, callback) {
+				var queryParams = {"recipe": parseInt(recipeId)};
+
+
+				if (month) {
+					var dateParts = month.split('/'),
+						month = parseInt(dateParts[0])-1,
+						year = parseInt(dateParts[1]),
+						startMonth = new Date(year, month, 1, 0, 0, 0, 0),
+						endMonth = new Date(year, month+1, 1, 0, 0, 0, 0);
+
+					queryParams['date'] = {
+						'$gt': startMonth,
+						'$lt': endMonth
+					};
+				}
+				testDB.count(queryParams, callback);
+			},
 			saveNotes: function(recipe, callback) {
 				recipeDB.update(
 					{_id: recipe._id},
@@ -116,6 +134,20 @@ angular.module('app.services', [])
 
 			delete: function(test, callback) {
 				testDB.remove({_id: test._id}, callback);
+			},
+
+			getAllMonths: function(callback) {
+				var dates = [];
+				testDB.find({}).sort({date: -1}).exec(function(err, docs) {
+					docs.forEach(function(doc) {
+						var dd = (doc.date.getMonth()+1) + '/' + doc.date.getFullYear();
+						if (dates.indexOf(dd) == -1) {
+							dates.push(dd);
+						}
+					});
+
+					callback(err, dates);
+				});
 			}
 		}
 	};

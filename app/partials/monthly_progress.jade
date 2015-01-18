@@ -1,0 +1,10 @@
+div#report 
+	h3 Progress for month: 
+		select(ng-model='current_month', ng-options="b as b for b in dates")
+			option(value='') all
+
+	div.chart(ng-repeat='catData in data')
+		div(class='group group-{{catData.type._id}}')
+			div.row(ng-repeat='item in catData.recipes')
+				div.col-md-3.data-header {{item.recipe}}
+				div.col-md-9.data(class='data-with-{{item.count}}') {{item.count}}
