@@ -23,6 +23,18 @@ App.run(['$state', function($state) {
   // $state.go('dashboard');
   $state.go('type_detail', {typeId: 1});
 }]);
+
+App.config(function() {
+  var gui = require('nw.gui');
+  var win = gui.Window.get();
+  var nativeMenuBar = new gui.Menu({ type: "menubar" });
+  try {
+    nativeMenuBar.createMacBuiltin("My App");
+    win.menu = nativeMenuBar;
+  } catch (ex) {
+    console.log(ex.message);
+  }
+});
 // App.config([
 //   '$routeProvider',
 //   '$locationProvider',
