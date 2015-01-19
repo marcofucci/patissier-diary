@@ -32,6 +32,7 @@
   "dependencies": {
     "fibers": "git://github.com/laverdet/node-fibers",
     "nedb": "^1.0.1",
-    "sync": "^0.2.3"
+    "sync": "^0.2.3",
+    "wait.for": "^0.6.6"
   }
 }

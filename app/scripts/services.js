@@ -56,7 +56,11 @@ angular.module('app.services', [])
 			getStats: function(recipeId, callback) {
 				testDB.count({"recipe": parseInt(recipeId)}, function(err, count) {
 					if (count == 0) {
-						callback(err, count, null, 0);
+						callback(err, {
+							count: count,
+							lastTest: null,
+							avRating: 0
+						});
 					} else {
 						testDB.find({"recipe": parseInt(recipeId)}).sort({date: -1}).exec(function(err, tests) {
 							var lastTest = tests[0],
@@ -66,7 +70,11 @@ angular.module('app.services', [])
 							});
 							avRating = avRating / count;
 							avRating = Math.ceil(avRating * 10) / 10;
-							callback(err, count, lastTest, avRating);
+							callback(err, {
+								count: count,
+								lastTest: lastTest,
+								avRating: avRating
+							});
 						})
 					}
 				});

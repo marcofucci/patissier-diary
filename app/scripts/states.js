@@ -54,57 +54,42 @@
       	}],
 
       	recipes: ['$stateParams', '$q', 'db', function($stateParams, $q, db) {
-      		var deferred = $q.defer(),
-              groupedRecipes = [],
-              groupsCount = 0;
+      		var deferred = $q.defer();
+          var wait = require('wait.for');
 
-          var postProcess = function() {
-            db.recipe.getAllByTypeId($stateParams.typeId, true, function(err, recipes) {
+          wait.launchFiber(function() {
+            var groupedRecipes = [];
+            var subtypes =  wait.for(db.subtype.getAllByTypeId, $stateParams.typeId);
+
+            angular.forEach(subtypes, function(subtype, index) {
+              var recipes = wait.for(db.recipe.getAllBySubTypeId, subtype._id);
               if (recipes.length) {
-                groupsCount += 1;
                 groupedRecipes.push({
-                  'group': groupedRecipes.length ? 'Other' : '',
+                  'group': subtype.name,
                   'recipes': recipes
                 });
               }
-
-              angular.forEach(groupedRecipes, function(data, i) {
-                angular.forEach(data.recipes, function(recipe, j) {
-                  db.recipe.getStats(recipe._id, function(err, count, lastTest, avRating) {
-                    recipe.stats = {
-                      count: count,
-                      lastTest: lastTest,
-                      avRating: avRating
-                    }
-
-                    if (i == groupsCount-1 && j == data.recipes.length-1) {
-                      deferred.resolve(groupedRecipes);
-                    }
-                  })
-                })
-              });
             });
-          }
 
-          db.subtype.getAllByTypeId($stateParams.typeId, function(err, subtypes) {
-            if (!subtypes.length) {
-              postProcess();
-            } else {
-              angular.forEach(subtypes, function(subtype, index) {
-                db.recipe.getAllBySubTypeId(subtype._id, function(err, recipes) {
-                  groupsCount += 1;
-                  groupedRecipes.push({
-                    'group': subtype.name,
-                    'recipes': recipes
-                  });
-
-                  if (index == subtypes.length-1) {
-                    postProcess();
-                  }
-                });
-
+            var recipes = wait.for(db.recipe.getAllByTypeId, $stateParams.typeId, true);
+            if (recipes.length) {
+              groupedRecipes.push({
+                'group': groupedRecipes.length ? 'Other' : '',
+                'recipes': recipes
               });
             }
+
+            angular.forEach(groupedRecipes, function(data, i) {
+              angular.forEach(data.recipes, function(recipe, j) {
+                var results = wait.for(db.recipe.getStats, recipe._id);
+                recipe.stats = {
+                  count: results.count,
+                  lastTest: results.lastTest,
+                  avRating: results.avRating
+                }
+              })
+              deferred.resolve(groupedRecipes);
+            });
           });
 
       		return deferred.promise;
@@ -168,34 +153,35 @@
           return $stateParams.month;
         }],
         data: ['$q', 'db', 'types', 'currentMonth', function($q, db, types, currentMonth) {
-          var deferred = $q.defer(),
-              _data = [];
+          var deferred = $q.defer();
+          var wait = require('wait.for');
 
-          angular.forEach(types, function(type, i) {
-            if (!type.component) {
-              var typeData = {
-                type: type,
-                recipes: []
-              };
+          wait.launchFiber(function() {
+            var _data = [];
 
-              db.recipe.getAllByTypeId(type._id, false, function(err, recipes) {
+            angular.forEach(types, function(type, i) {
+              if (!type.component) {
+                var typeData = {
+                  type: type,
+                  recipes: []
+                };
+
+                var recipes = wait.for(db.recipe.getAllByTypeId, type._id, false);
                 angular.forEach(recipes, function(recipe, j) {
-                  db.recipe.getCountPerMonth(recipe._id, currentMonth, function(err, count) {
-                    typeData.recipes.push({
-                      type: type,
-                      recipe: recipe.name,
-                      count: count
-                    });
-
-                    if (j == recipes.length-1) {
-                      deferred.resolve(_data);
-                    }
+                  var count = wait.for(db.recipe.getCountPerMonth, recipe._id, currentMonth);
+                  typeData.recipes.push({
+                    type: type,
+                    recipe: recipe.name,
+                    count: count
                   });
-                });
-              });
 
-              _data.push(typeData);
-            }
+                });
+
+                _data.push(typeData);
+              }
+            });
+
+            deferred.resolve(_data);
           });
 
           return deferred.promise;
