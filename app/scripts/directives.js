@@ -151,4 +151,29 @@ function() {
 }
 ])
 
+.directive('starRating', ['$timeout', function($timeout) {
+    return  {
+      restrict: 'E',
+      require: 'ngModel',
+      templateUrl:  '/partials/star_rating.html',
+      scope: {
+        model: '=ngModel',
+        ref: '@ngModel',
+        readonly: '=',
+        size: '='
+      },
+      link: function(scope, element, attrs) {
+        $('.rating', element).rating({
+          size: scope.size || 'xs',
+          showClear: false,
+          showCaption: false,
+          readonly: scope.readonly
+        }).rating('update', scope.model)
+        .on('rating.change', function(event, value, caption) {
+          scope.model = parseFloat(value);
+        });
+      }
+    };
+}])
+
 ;

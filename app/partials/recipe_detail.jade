@@ -11,7 +11,7 @@ div#tests_list
 					span.badge.badge-2x {{ tests.length - $index }}
 			div.media-body
 				h4 {{test.date|date:"dd/MM/yyyy"}}
-				rating.gi-1-3x(ng-model='test.rating', readonly='true')
+				star-rating(ng-model='test.rating', readonly='true', size='"xxs"')
 
 				div.row.img(ng-show='test.img')
 					div.thumbnail

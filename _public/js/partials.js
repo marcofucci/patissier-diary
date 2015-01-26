@@ -72,7 +72,7 @@ angular.module('partials', [])
 '      <div class="media-left"><a href="#" ng-click="changeTest(test)" class="media-left"><span class="badge badge-2x">{{ tests.length - $index }}</span></a></div>',
 '      <div class="media-body">',
 '        <h4>{{test.date|date:"dd/MM/yyyy"}}</h4>',
-'        <rating ng-model="test.rating" readonly="true" class="gi-1-3x"></rating>',
+'        <star-rating ng-model="test.rating" readonly="true" size="&quot;xxs&quot;"></star-rating>',
 '        <div ng-show="test.img" class="row img">',
 '          <div class="thumbnail"><img src="{{test.img|home}}" ng-click="openImage(test.img)"></div>',
 '        </div>',
@@ -169,7 +169,7 @@ angular.module('partials', [])
 '          <button type="button" ng-click="openCalendar($event)" value="calendar" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button></span>',
 '      </p>',
 '      <p class="input-group">',
-'        <rating ng-model="test.rating" class="gi-1-5x"></rating>',
+'        <star-rating ng-model="test.rating" size="&quot;xs&quot;"></star-rating>',
 '      </p>',
 '      <p class="input-group">',
 '        <div>',
@@ -259,7 +259,7 @@ angular.module('partials', [])
 '        <div class="col-md-1"><i ng-if="recipe.stats.count &gt; 0" class="small">last</i></div>',
 '        <div class="col-md-6">',
 '          <div ng-if="recipe.stats.count &gt; 0">',
-'            <rating ng-model="recipe.stats.lastTest.rating" readonly="true" class="gi-1-5x"></rating>',
+'            <star-rating ng-model="recipe.stats.lastTest.rating" readonly="true"></star-rating>',
 '            <p>{{recipe.stats.lastTest.date|date:"dd/MM/yyyy"}}</p>',
 '          </div>',
 '        </div>',
@@ -296,4 +296,9 @@ angular.module('partials', [])
 '    <textarea ng-model="model.materials" rows="2" class="form-control"></textarea>',
 '  </div>',
 '</div>',''].join("\n"));
+}])
+.run(['$templateCache', function($templateCache) {
+  return $templateCache.put('/partials/star_rating.html', [
+'',
+'<input value="{{model}}" class="rating">',''].join("\n"));
 }]);

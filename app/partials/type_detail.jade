@@ -12,7 +12,7 @@ div
 					i.small(ng-if='recipe.stats.count > 0') last
 				div.col-md-6
 					div(ng-if='recipe.stats.count > 0')
-						rating.gi-1-5x(ng-model='recipe.stats.lastTest.rating', readonly='true')
+						star-rating(ng-model='recipe.stats.lastTest.rating', readonly='true')
 						p {{recipe.stats.lastTest.date|date:"dd/MM/yyyy"}}
 				div.col-md-3.avRating
 					div(ng-if='recipe.stats.count > 0')
