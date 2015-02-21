@@ -172,6 +172,7 @@
                   typeData.recipes.push({
                     type: type,
                     recipe: recipe.name,
+                    at_exam: !!recipe.at_exam,
                     count: count
                   });
 
@@ -189,9 +190,26 @@
       }
     };
 
+    defs.MemosList = {
+      name: 'memos_list',
+      parent: 'layout',
+      controller: 'MemosCtrl',
+      url: '#memos',
+      templateUrl: '/partials/memos_list.html',
+      resolve: {
+        memos: ['db', '$q', function(db, $q) {
+          var deferred = $q.defer();
+
+          db.memo.getAll(function(err, memos) {
+            deferred.resolve(memos);
+          });
+          return deferred.promise;
+        }]
+      }
+    };
+
     return defs;
   };
-
 
 
 })();

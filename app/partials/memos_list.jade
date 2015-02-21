@@ -1,0 +1,22 @@
+h3 Memos
+
+div.row
+  div.col-sm-10
+    div.input-group.input-group-lg
+      span.input-group-btn
+        button.btn.btn-success.btn-lg
+          i.fa.fa-chevron-right
+      form#memo-form(ng-submit="add()")
+        input.form-control.input-lg#new-memo(placeholder="new memo...", ng-model="newMemoText", autofocus="")
+      span.input-group-btn
+        button.btn.btn-default.btn-lg(type='submit')
+          i.glyphicon.glyphicon-plus
+
+div.row(ng-repeat="memo in memos")
+  div.col-sm-10
+    div.input-group.input-group-lg
+      form(ng-submit="edit(memo)")
+        input.edit.form-control.input-lg(ng-trim="false", ng-model="memo.text", ng-blur="update(memo)")
+      span.input-group-btn
+        button.btn.btn-default.btn-lg.destroy(ng-really-message="Are you sure you want to delete this memo?", ng-really-click="remove(memo)")
+          i.glyphicon.glyphicon-remove

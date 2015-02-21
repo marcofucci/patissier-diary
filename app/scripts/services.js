@@ -13,7 +13,8 @@ angular.module('app.services', [])
 		typeDB = db.collection('type'),
 		subTypeDB = db.collection('subtype'),
 		recipeDB = db.collection('recipe'),
-		testDB = db.collection('test');
+		testDB = db.collection('test'),
+		memoDB = db.collection('memo');
 
 	var service = {
 		type: {
@@ -160,6 +161,31 @@ angular.module('app.services', [])
 
 					callback(err, dates);
 				});
+			}
+		},
+
+		memo: {
+			getAll: function(callback) {
+				return memoDB.find({}).sort({date: -1}).exec(callback);
+			},
+
+			saveOrUpdate: function(memo, callback) {
+				if (memo._id != undefined) {
+					memoDB.update(
+						{_id: memo._id},
+						{$set: {
+							date: memo.date,
+							text: memo.text
+						}},
+						function(err, numReplaced, newDoc) { callback(err, newDoc);}
+					);
+				} else {
+					memoDB.insert(memo, callback);
+				}
+			},
+
+			delete: function(memo, callback) {
+				memoDB.remove({_id: memo._id}, callback);
 			}
 		}
 	};

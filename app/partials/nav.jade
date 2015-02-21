@@ -1,3 +1,9 @@
 ul.nav.nav-pills.small
   li(ng-repeat='type in types', ng-class="{'active': current_type._id == type._id}")
     a(ui-sref='type_detail({typeId: type._id})') {{type.name}}
+
+hr
+
+ul.nav.nav-pills.small
+  li
+    a(ui-sref='memos_list') MEMOS

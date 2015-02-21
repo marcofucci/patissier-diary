@@ -35,28 +35,3 @@ App.config(function() {
     console.log(ex.message);
   }
 });
-// App.config([
-//   '$routeProvider',
-//   '$locationProvider',
-//   function($routeProvider, $locationProvider, config) {
-
-//     $routeProvider
-//       .when('/dashboard', {templateUrl: '/partials/dashboard.html'})
-//       .when('/view1', {templateUrl: '/partials/partial1.html'})
-//       .when('/view2', {templateUrl: '/partials/partial2.html'})
-
-//       // Catch all
-//       .otherwise({redirectTo: '/dashboard'});
-
-//     //Without server side support html5 must be disabled.
-//     $locationProvider.html5Mode(false);
-//   }
-// ]);
-
-
-// App.run([
-//   'db'
-
-// (db) ->
-//   db.install()
-// ])

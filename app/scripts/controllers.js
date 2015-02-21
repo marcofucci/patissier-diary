@@ -77,7 +77,7 @@ angular.module('app.controllers', [])
       $modal.open({
         templateUrl: '/partials/recipe_notes_modal.html',
         controller: 'RecipeNotesModalCtrl',
-        backdrop: 'static',
+        // backdrop: 'static',
         size: 'lg',
         resolve: {
           recipe: function() { 
@@ -171,4 +171,49 @@ angular.module('app.controllers', [])
     $state.go('monthly_progress', {month: newVal});
   });
 }])
+
+.controller('MemosCtrl', [
+  '$scope', 'memos', 'db',
+  function($scope, memos, db) {
+    var wait = require('wait.for');
+
+    $scope.memos = memos;
+
+    $scope.add = function() {
+      var newMemoText = $scope.newMemoText.trim();
+      if (newMemoText.length === 0) {
+        return;
+      }
+
+      wait.launchFiber(function() {
+        var memo = {
+          text: newMemoText,
+          date: new Date()
+        };
+        var memo = wait.for(db.memo.saveOrUpdate, memo);
+        $scope.memos.unshift(memo);
+        $scope.memos = $scope.memos;
+
+        $scope.newMemoText = '';
+        $scope.$apply();
+      });
+    };
+
+    $scope.remove = function(memo) {
+      wait.launchFiber(function() {
+        $scope.memos.splice(memos.indexOf(memo), 1);
+
+        wait.for(db.memo.delete, memo);
+      });
+    };
+
+    $scope.update = function(memo) {
+      var newMemo = memo;
+      wait.launchFiber(function() {
+        var memo = wait.for(db.memo.saveOrUpdate, newMemo);
+        $scope.memos[$scope.memos.indexOf(memo)] = memo;
+      });
+    }
+  }
+])
 ;
