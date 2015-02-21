@@ -23,3 +23,6 @@ dist
 dist/*
 
 app/scripts/constants.js
+cache
+app/assets/build/
+_public/*

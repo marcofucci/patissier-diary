@@ -24,6 +24,41 @@ angular.module('partials', [])
 '</div>',''].join("\n"));
 }])
 .run(['$templateCache', function($templateCache) {
+  return $templateCache.put('/partials/img_modal.html', [
+'',
+'<div class="modal-header"><img src="{{img|home}}" style="width: 568px">',
+'  <div class="modal-footer">',
+'    <button ng-click="cancel()" class="btn btn-warning">Close</button>',
+'  </div>',
+'</div>',''].join("\n"));
+}])
+.run(['$templateCache', function($templateCache) {
+  return $templateCache.put('/partials/memos_list.html', [
+'',
+'<h3>Memos</h3>',
+'<div class="row">',
+'  <div class="col-sm-10">',
+'    <div class="input-group input-group-lg"><span class="input-group-btn">',
+'        <button class="btn btn-success btn-lg"><i class="fa fa-chevron-right"></i></button></span>',
+'      <form id="memo-form" ng-submit="add()">',
+'        <input id="new-memo" placeholder="new memo..." ng-model="newMemoText" autofocus="" class="form-control input-lg">',
+'      </form><span class="input-group-btn">',
+'        <button type="submit" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-plus"></i></button></span>',
+'    </div>',
+'  </div>',
+'</div>',
+'<div ng-repeat="memo in memos" class="row">',
+'  <div class="col-sm-10">',
+'    <div class="input-group input-group-lg">',
+'      <form ng-submit="edit(memo)">',
+'        <input ng-trim="false" ng-model="memo.text" ng-blur="update(memo)" class="edit form-control input-lg">',
+'      </form><span class="input-group-btn">',
+'        <button ng-really-message="Are you sure you want to delete this memo?" ng-really-click="remove(memo)" class="btn btn-default btn-lg destroy"><i class="glyphicon glyphicon-remove"></i></button></span>',
+'    </div>',
+'  </div>',
+'</div>',''].join("\n"));
+}])
+.run(['$templateCache', function($templateCache) {
   return $templateCache.put('/partials/monthly_progress.html', [
 '',
 '<div id="report"> ',
@@ -39,57 +74,6 @@ angular.module('partials', [])
 '        <div class="col-md-9 data data-with-{{item.count}}">{{item.count}}</div>',
 '      </div>',
 '    </div>',
-'  </div>',
-'</div>',''].join("\n"));
-}])
-.run(['$templateCache', function($templateCache) {
-  return $templateCache.put('/partials/img_modal.html', [
-'',
-'<div class="modal-header"><img src="{{img|home}}" style="width: 568px">',
-'  <div class="modal-footer">',
-'    <button ng-click="cancel()" class="btn btn-warning">Close</button>',
-'  </div>',
-'</div>',''].join("\n"));
-}])
-.run(['$templateCache', function($templateCache) {
-  return $templateCache.put('/partials/recipe_notes_modal.html', [
-'',
-'<div class="modal-header">',
-'  <div class="row">',
-'    <div class="col-md-11">',
-'      <h3 class="modal-title">{{recipe.name}}</h3>',
-'    </div>',
-'    <div class="col-md-1"><a href="#" ng-click="changeEdit(true)" ng-show="!edit" class="glyphicon glyphicon-edit gi-1-5x"><a href="#" ng-click="changeEdit(false)" ng-show="edit" class="glyphicon glyphicon-check gi-1-5x"></a></a></div>',
-'  </div> ',
-'  <form id="test-form" class="modal-body">',
-'    <div ng-show="!edit" class="no-edit">',
-'      <div class="row row1">',
-'        <div class="col-md-3">',
-'          <h4>Ingredients</h4>',
-'          <div ng-bind-html="recipe.ingredients"></div>',
-'        </div>',
-'        <div class="col-md-9">',
-'          <h4>Procedure</h4>',
-'          <div ng-bind-html="recipe.procedure"></div>',
-'        </div>',
-'      </div>',
-'      <div class="row form-group">',
-'        <div class="col-md-3">',
-'          <h4>Cooking Time</h4>',
-'          <div ng-bind-html="recipe.cooking_time"></div>',
-'        </div>',
-'        <div class="col-md-9">',
-'          <h4>Materials</h4>',
-'          <div ng-bind-html="recipe.materials"></div>',
-'        </div>',
-'      </div>',
-'    </div>',
-'    <div ng-show="edit" class="form-group">',
-'      <notes-form ng-model="recipe"></notes-form>',
-'    </div>',
-'  </form>        ',
-'  <div class="modal-footer">',
-'    <button ng-click="close()" ng-class="{\'disabled\': saveInProgress &amp;&amp; typing}" class="btn btn-warning">Close</button>',
 '  </div>',
 '</div>',''].join("\n"));
 }])
@@ -154,6 +138,48 @@ angular.module('partials', [])
 '        <p ng-bind-html="renderHtml(test.notes)"></p>',
 '      </div>',
 '    </div>',
+'  </div>',
+'</div>',''].join("\n"));
+}])
+.run(['$templateCache', function($templateCache) {
+  return $templateCache.put('/partials/recipe_notes_modal.html', [
+'',
+'<div class="modal-header">',
+'  <div class="row">',
+'    <div class="col-md-11">',
+'      <h3 class="modal-title">{{recipe.name}}</h3>',
+'    </div>',
+'    <div class="col-md-1"><a href="#" ng-click="changeEdit(true)" ng-show="!edit" class="glyphicon glyphicon-edit gi-1-5x"><a href="#" ng-click="changeEdit(false)" ng-show="edit" class="glyphicon glyphicon-check gi-1-5x"></a></a></div>',
+'  </div> ',
+'  <form id="test-form" class="modal-body">',
+'    <div ng-show="!edit" class="no-edit">',
+'      <div class="row row1">',
+'        <div class="col-md-3">',
+'          <h4>Ingredients</h4>',
+'          <div ng-bind-html="recipe.ingredients"></div>',
+'        </div>',
+'        <div class="col-md-9">',
+'          <h4>Procedure</h4>',
+'          <div ng-bind-html="recipe.procedure"></div>',
+'        </div>',
+'      </div>',
+'      <div class="row form-group">',
+'        <div class="col-md-3">',
+'          <h4>Cooking Time</h4>',
+'          <div ng-bind-html="recipe.cooking_time"></div>',
+'        </div>',
+'        <div class="col-md-9">',
+'          <h4>Materials</h4>',
+'          <div ng-bind-html="recipe.materials"></div>',
+'        </div>',
+'      </div>',
+'    </div>',
+'    <div ng-show="edit" class="form-group">',
+'      <notes-form ng-model="recipe"></notes-form>',
+'    </div>',
+'  </form>        ',
+'  <div class="modal-footer">',
+'    <button ng-click="close()" ng-class="{\'disabled\': saveInProgress &amp;&amp; typing}" class="btn btn-warning">Close</button>',
 '  </div>',
 '</div>',''].join("\n"));
 }])
@@ -305,30 +331,4 @@ angular.module('partials', [])
   return $templateCache.put('/partials/star_rating.html', [
 '',
 '<input value="{{model}}" class="rating">',''].join("\n"));
-}])
-.run(['$templateCache', function($templateCache) {
-  return $templateCache.put('/partials/memos_list.html', [
-'',
-'<h3>Memos</h3>',
-'<div class="row">',
-'  <div class="col-sm-10">',
-'    <div class="input-group input-group-lg"><span class="input-group-btn">',
-'        <button class="btn btn-success btn-lg"><i class="fa fa-chevron-right"></i></button></span>',
-'      <form id="memo-form" ng-submit="add()">',
-'        <input id="new-memo" placeholder="new memo..." ng-model="newMemoText" autofocus="" class="form-control input-lg">',
-'      </form><span class="input-group-btn">',
-'        <button type="submit" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-plus"></i></button></span>',
-'    </div>',
-'  </div>',
-'</div>',
-'<div ng-repeat="memo in memos" class="row">',
-'  <div class="col-sm-10">',
-'    <div class="input-group input-group-lg">',
-'      <form ng-submit="edit(memo)">',
-'        <input ng-trim="false" ng-model="memo.text" ng-blur="update(memo)" class="edit form-control input-lg">',
-'      </form><span class="input-group-btn">',
-'        <button ng-really-message="Are you sure you want to delete this memo?" ng-really-click="remove(memo)" class="btn btn-default btn-lg destroy"><i class="glyphicon glyphicon-remove"></i></button></span>',
-'    </div>',
-'  </div>',
-'</div>',''].join("\n"));
 }]);
